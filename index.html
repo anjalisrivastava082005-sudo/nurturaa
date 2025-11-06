@@ -1,0 +1,125 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nurtura AI</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #ffdee9, #b5fffc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #ff4b77;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 10px;
+      display: block;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background-color: #ff4b77;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #ff2d63;
+    }
+    .result {
+      background: #fff8f9;
+      border: 1px solid #ffc8d4;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌸 Nurtura AI</h2>
+
+    <form id="nurturaForm">
+      <label>Name</label>
+      <input type="text" id="name" required>
+
+      <label>Age</label>
+      <input type="number" id="age" required>
+
+      <label>Pregnancy Week</label>
+      <input type="number" id="week" required>
+
+      <label>Symptoms</label>
+      <textarea id="symptoms" placeholder="e.g., nausea, headache, fatigue" required></textarea>
+
+      <label>Type of Help Needed</label>
+      <select id="helpType" required>
+        <option value="">--Select--</option>
+        <option value="emotional">Emotional Support</option>
+        <option value="medical">Medical Guidance</option>
+        <option value="nutrition">Nutrition Tips</option>
+        <option value="exercise">Exercise Suggestions</option>
+      </select>
+
+      <button type="submit">Get AI Advice</button>
+    </form>
+
+    <div class="result" id="resultBox">
+      <h3>🤖 Nurtura AI says:</h3>
+      <p id="advice"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('nurturaForm');
+    const resultBox = document.getElementById('resultBox');
+    const adviceText = document.getElementById('advice');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        week: document.getElementById('week').value,
+        symptoms: document.getElementById('symptoms').value,
+        helpType: document.getElementById('helpType').value
+      };
+
+      // This URL will be your backend endpoint
+      const response = await fetch('http://127.0.0.1:8000/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      adviceText.textContent = result.advice;
+      resultBox.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
